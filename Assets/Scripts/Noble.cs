@@ -72,7 +72,6 @@ public class Noble : MonoBehaviour
             opinion.DisplayOpinion(2 + lawOpinion, "Law");
         }
         ThoughtBubble.SetActive(true);
-        QuestionPanel.SetActive(false);
         return ThoughtBubble;
     }
 }

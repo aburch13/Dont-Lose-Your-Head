@@ -173,7 +173,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case 4: //Jester
-                if(selfDeprecationRemaining <= 0)
+                if (selfDeprecationRemaining <= 0)
                 {
                     return;
                 }
@@ -189,7 +189,7 @@ public class GameManager : MonoBehaviour
                 nobles[1].LawPraised(1);
                 nobles[2].LawPraised(1);
                 lawPanel.gameObject.SetActive(false);
-                    insult.Bark(6);
+                insult.Bark(6);
                 break;
             case 6:
                 nobles[0].LawPraised(-1);
