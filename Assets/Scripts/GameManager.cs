@@ -48,9 +48,12 @@ public class GameManager : MonoBehaviour
     private GameOver gameOver;
     [SerializeField]
     private TextMeshProUGUI dayCounter;
+    [SerializeField]
+    private TextMeshProUGUI selfDeprecationCounter;
 
     private GameState gameState;
     private int currentTarget;
+    private int selfDeprecationRemaining;
     private GameObject activeThoughtBubble;
     public enum GameState { QUESTION, JOKE, VOTE }
     // Start is called before the first frame update
@@ -89,7 +92,7 @@ public class GameManager : MonoBehaviour
             king.NobleJested(Random.Range(-1, 2), 1);
             king.NobleJested(Random.Range(-1, 2), 2);
         }
-
+        selfDeprecationRemaining = 2;
     }
     public void AskQuestion(int subjectID)
     {
@@ -170,6 +173,11 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case 4: //Jester
+                if(selfDeprecationRemaining <= 0)
+                {
+                    return;
+                }
+                selfDeprecationRemaining -= 1;
                 nobles[0].Praise(1);
                 nobles[1].Praise(1);
                 nobles[2].Praise(1);
@@ -256,7 +264,13 @@ public class GameManager : MonoBehaviour
                 {
                     go.SetActive(false);
                 }
-                if (targetID == 5)
+                if(targetID == 4)
+                {
+                    selfDeprecationCounter.text = "Remaining Self Deprecation: " + selfDeprecationRemaining;
+                    selfDeprecationCounter.gameObject.transform.parent.GetComponentInChildren<Button>().interactable = selfDeprecationRemaining > 0;
+                    jokePanels[targetID].SetActive(true);
+                }
+                else if (targetID == 5)
                 {
                     lawPanel.DisplayLaw(highLaw);
                     lawPanel.ToggleJoke(true);
@@ -309,12 +323,29 @@ public class GameManager : MonoBehaviour
     }
     public void HappinessChange(int amount)
     {
+        if(amount < 0)
+        {
+            nobles[0].Mock(Mathf.Abs(amount));
+            nobles[1].Mock(Mathf.Abs(amount));
+            nobles[2].Mock(Mathf.Abs(amount));
 
+        }
+        else if(amount > 0)
+        {
+            nobles[0].Praise(Mathf.Abs(amount));
+            nobles[1].Praise(Mathf.Abs(amount));
+            nobles[2].Praise(Mathf.Abs(amount));
+        }
+        if (nobles[0].GetJesterOpinion() < 0 || nobles[1].GetJesterOpinion() < 0 || nobles[2].GetJesterOpinion() < 0)
+        {
+            GameOver(true);
+            return;
+        }
     }
 
     public void MoneyChange(int amount)
     {
-        resourceMeters[1].value += amount;
+        resourceMeters[0].value += amount;
     }
     public void FoodChange(int amount)
     {
@@ -322,7 +353,7 @@ public class GameManager : MonoBehaviour
     }
     public void MilitaryChange(int amount)
     {
-        resourceMeters[1].value += amount;
+        resourceMeters[2].value += amount;
     }
 
     public void ResetGame()
@@ -332,6 +363,13 @@ public class GameManager : MonoBehaviour
         dayCounter.text = "Week " + (week + 1) + "\n" + "Day " + (day + 1);
         gameState = GameState.QUESTION;
         BuildLaws();
-        
+        Money = 4;
+        Food = 1;
+        Military = 4;
+        resourceMeters[0].value = Money;
+        resourceMeters[1].value = Food;
+        resourceMeters[2].value = Military;
+
+
     }
 }
