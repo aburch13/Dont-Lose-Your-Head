@@ -40,6 +40,10 @@ public class GameManager : MonoBehaviour
     private Insult insult;
     [SerializeField]
     private GameObject gameOverScreen;
+    [SerializeField]
+    private PhaseTracker phaseTracker;
+    [SerializeField]
+    private GameOver gameOver;
 
     private GameState gameState;
     private int currentTarget;
@@ -50,6 +54,7 @@ public class GameManager : MonoBehaviour
     {
         gameState = GameState.QUESTION;
         BuildLaws();
+        phaseTracker.ChangePhase(gameState);
     }
 
     // Update is called once per frame
@@ -67,6 +72,18 @@ public class GameManager : MonoBehaviour
             nobles[0].SetLawOpinion(2);
             nobles[1].SetLawOpinion(-2);
             nobles[2].SetLawOpinion(0);
+        }
+        else
+        {
+            highLaw.ShuffleLaw();
+            lowLaw.ShuffleLaw();
+            nobles[0].SetLawOpinion(Random.Range(-2, 3));
+            nobles[1].SetLawOpinion(Random.Range(-2, 3));
+            nobles[2].SetLawOpinion(Random.Range(-2, 3));
+
+            king.NobleJested(Random.Range(-1, 2), 0);
+            king.NobleJested(Random.Range(-1, 2), 1);
+            king.NobleJested(Random.Range(-1, 2), 2);
         }
 
     }
@@ -92,6 +109,7 @@ public class GameManager : MonoBehaviour
         }
 
         gameState = GameState.JOKE;
+        phaseTracker.ChangePhase(gameState);
     }
 
 
@@ -161,7 +179,7 @@ public class GameManager : MonoBehaviour
         activeThoughtBubble.SetActive(false);
         if (nobles[0].GetJesterOpinion() < 0 || nobles[1].GetJesterOpinion() < 0 || nobles[2].GetJesterOpinion() < 0)
         {
-            GameOver();
+            GameOver(true);
             return;
         }
         day++;
@@ -173,12 +191,14 @@ public class GameManager : MonoBehaviour
         else
         {
             gameState = GameState.QUESTION;
+            phaseTracker.ChangePhase(gameState);
         }
     }
-    private void GameOver()
+    private void GameOver(bool isFromNoble)
     {
         gameState = GameState.QUESTION;
         gameOverScreen.SetActive(true);
+        gameOver.MoveToGameOver(isFromNoble);
     }
 
     public void Select(int targetID)
@@ -191,7 +211,11 @@ public class GameManager : MonoBehaviour
                 {
                     go.SetActive(false);
                 }
-                if (targetID == 5)
+                if (targetID == 4)
+                {
+                    return;
+                }
+                else if (targetID == 5)
                 {
                     lawPanel.DisplayLaw(highLaw);
                     lawPanel.ToggleJoke(false);
@@ -252,6 +276,16 @@ public class GameManager : MonoBehaviour
             lowLaw.Pass();
             lawPanel.PassLaw(lowLaw);
         }
+        if(Food <= 0 || Money <= 0 || Military <= 0)
+        {
+            GameOver(false);
+        }
+        else
+        {
+            gameState = GameState.QUESTION;
+            phaseTracker.ChangePhase(gameState);
+            BuildLaws();
+        }
     }
     public void HappinessChange(int amount)
     {
@@ -269,5 +303,14 @@ public class GameManager : MonoBehaviour
     public void MilitaryChange(int amount)
     {
         resourceMeters[1].value += amount;
+    }
+
+    public void ResetGame()
+    {
+        week = 0;
+        day = 0;
+        gameState = GameState.QUESTION;
+        BuildLaws();
+        
     }
 }

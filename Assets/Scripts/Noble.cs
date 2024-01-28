@@ -27,6 +27,7 @@ public class Noble : MonoBehaviour
     {
         jesterOpinion += intensity;
         jesterOpinion = Mathf.Clamp(jesterOpinion, -1, 4);
+        Debug.Log(jesterOpinion);
     }
 
     public void LawPraised(int intensity)
