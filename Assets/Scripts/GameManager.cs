@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -345,14 +344,17 @@ public class GameManager : MonoBehaviour
 
     public void MoneyChange(int amount)
     {
+        Money += amount;
         resourceMeters[0].value += amount;
     }
     public void FoodChange(int amount)
     {
+        Food += amount;
         resourceMeters[1].value += amount;
     }
     public void MilitaryChange(int amount)
     {
+        Military += amount;
         resourceMeters[2].value += amount;
     }
 

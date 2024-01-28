@@ -18,15 +18,15 @@ public class GameOver : MonoBehaviour
             if(GameManager.week != 1)
             {
                 if (GameManager.day != 0)
-                    text.text = "A noble called for your head after " + GameManager.week + "weeks and " + (GameManager.day + 1) + "days!";
+                    text.text = "A noble called for your head after " + GameManager.week + " weeks and " + (GameManager.day + 1) + " days!";
                 else
-                    text.text = "A noble called for your head after " + GameManager.week + "weeks and " + (GameManager.day + 1) + "day!";
+                    text.text = "A noble called for your head after " + GameManager.week + " weeks and " + (GameManager.day + 1) + " day!";
             }
             else
             { if (GameManager.day != 0)
-                    text.text = "A noble called for your head after " + GameManager.week + "week and " + (GameManager.day + 1) + "days!";
+                    text.text = "A noble called for your head after " + GameManager.week + " week and " + (GameManager.day + 1) + " days!";
                 else
-                    text.text = "A noble called for your head after " + GameManager.week + "week and " + (GameManager.day + 1) + "day!";
+                    text.text = "A noble called for your head after " + GameManager.week + " week and " + (GameManager.day + 1) + " day!";
             }
         }
         else
