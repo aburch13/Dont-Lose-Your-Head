@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,6 +46,8 @@ public class GameManager : MonoBehaviour
     private PhaseTracker phaseTracker;
     [SerializeField]
     private GameOver gameOver;
+    [SerializeField]
+    private TextMeshProUGUI dayCounter;
 
     private GameState gameState;
     private int currentTarget;
@@ -124,11 +128,13 @@ public class GameManager : MonoBehaviour
                     nobles[1].Mock(1);
                     nobles[2].Mock(1);
                     king.NobleJested(1, 0);
+                    insult.Bark(3);
                 }
                 else //insult
                 {
                     nobles[0].Mock(1);
                     king.NobleJested(-1, 0);
+                    insult.Bark(0);
                 }
                 break;
             case 2: //Noble B
@@ -138,11 +144,13 @@ public class GameManager : MonoBehaviour
                     nobles[0].Mock(1);
                     nobles[2].Mock(1);
                     king.NobleJested(1, 1);
+                    insult.Bark(4);
                 }
                 else //insult
                 {
                     nobles[1].Mock(1);
                     king.NobleJested(-1, 1);
+                    insult.Bark(1);
                 }
                 break;
             case 3: //Noble C
@@ -152,11 +160,13 @@ public class GameManager : MonoBehaviour
                     nobles[0].Mock(1);
                     nobles[1].Mock(1);
                     king.NobleJested(1, 2);
+                    insult.Bark(5);
                 }
                 else //insult
                 {
                     nobles[2].Mock(1);
                     king.NobleJested(-1, 2);
+                    insult.Bark(2);
                 }
                 break;
             case 4: //Jester
@@ -164,16 +174,21 @@ public class GameManager : MonoBehaviour
                 nobles[1].Praise(1);
                 nobles[2].Praise(1);
 
+                insult.Bark(7);
                 break;
             case 5:
                 nobles[0].LawPraised(1);
                 nobles[1].LawPraised(1);
                 nobles[2].LawPraised(1);
+                lawPanel.gameObject.SetActive(false);
+                    insult.Bark(6);
                 break;
             case 6:
                 nobles[0].LawPraised(-1);
                 nobles[1].LawPraised(-1);
                 nobles[2].LawPraised(-1);
+                lawPanel.gameObject.SetActive(false);
+                    insult.Bark(6);
                 break;
         }
         activeThoughtBubble.SetActive(false);
@@ -183,6 +198,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         day++;
+        dayCounter.text = "Week " + (week + 1) + "\n" + "Day " + (day + 1);
         if (day == 5)
         {
             gameState = GameState.VOTE;
@@ -196,6 +212,7 @@ public class GameManager : MonoBehaviour
     }
     private void GameOver(bool isFromNoble)
     {
+        Debug.LogError("uhoh you died");
         gameState = GameState.QUESTION;
         gameOverScreen.SetActive(true);
         gameOver.MoveToGameOver(isFromNoble);
@@ -282,6 +299,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            week++;
+            day = 0;
+            dayCounter.text = "Week " + (week + 1) + "\n" + "Day " + (day + 1);
             gameState = GameState.QUESTION;
             phaseTracker.ChangePhase(gameState);
             BuildLaws();
@@ -309,6 +329,7 @@ public class GameManager : MonoBehaviour
     {
         week = 0;
         day = 0;
+        dayCounter.text = "Week " + (week + 1) + "\n" + "Day " + (day + 1);
         gameState = GameState.QUESTION;
         BuildLaws();
         

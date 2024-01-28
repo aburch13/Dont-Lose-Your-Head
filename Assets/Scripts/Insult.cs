@@ -37,28 +37,35 @@ public class Insult : MonoBehaviour
         speechBubble.SetActive(true);
         switch(subject)
         {
-            case 0:
+            case 0://Insult General
+                textBlock.text = nobleAInsults[Random.Range(0, nobleAInsults.Length)];
+                break;
+            case 1://Insult Dowager
+                textBlock.text = nobleBInsults[Random.Range(0, nobleBInsults.Length)];
 
                 break;
-            case 1:
+            case 2://Insult Upstart
 
+                textBlock.text = nobleCInsults[Random.Range(0, nobleCInsults.Length)];
                 break;
-            case 2:
+            case 3://Praise General
 
+                textBlock.text = nobleAPraise[Random.Range(0, nobleAPraise.Length)];
                 break;
-            case 3:
+            case 4://Praise Dowager
 
+                textBlock.text = nobleBPraise[Random.Range(0, nobleBPraise.Length)];
                 break;
-            case 4:
+            case 5://Praise Upstart
 
+                textBlock.text = nobleCPraise[Random.Range(0, nobleCPraise.Length)];
                 break;
-            case 5:
+            case 6://Insult Law
 
+                textBlock.text = lawInsults[Random.Range(0, lawInsults.Length)];
                 break;
-            case 6:
-
-                break;
-            case 7:
+            case 7://Insult Jester
+                textBlock.text = jesterInsults[Random.Range(0, jesterInsults.Length)];
 
                 break;
         }
