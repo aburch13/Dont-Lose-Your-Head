@@ -9,6 +9,8 @@ public class GameOver : MonoBehaviour
     private TextMeshProUGUI text;
     [SerializeField]
     private GameManager gameManager;
+    [SerializeField]
+    private GameObject lawPanel;
 
 
     public void MoveToGameOver(bool isFromNoble)
@@ -40,6 +42,7 @@ public class GameOver : MonoBehaviour
                 text.text = "The Kingdom fell after only " + GameManager.week + "week!";
             }
         }
+        lawPanel.SetActive(false);
     }
     public void Quit()
     {
